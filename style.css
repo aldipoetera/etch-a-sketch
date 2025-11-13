@@ -50,5 +50,26 @@ body {
 
 .colorControls {
   display: flex;
-  align-items: end;
+  align-items: center;
+}
+.sizeControls p {margin: 0;}
+.sizeControls {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.5em;
+}
+
+.canvas {
+  display: flex;
+}
+
+.column {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+}
+
+.grid {
+  flex: 1 1 auto;
 }
