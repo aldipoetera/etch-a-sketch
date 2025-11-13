@@ -3,9 +3,41 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title></title>
+    <link rel="stylesheet" href="style.css">
+    <title>Etch-A-Sketch</title>
   </head>
   <body>
+    <div class="fullpage">
+      <div class="header">
+        <h1 class="logo">
+          Etch-A-Sketch!
+        </h1>
+        <div class="controls">
+          <div class="colorControls">
+            <div class="colorPick">
+              <div class="pickRGBA">
+                <input type="color" id="colorRGB">
+                <input type="range" id="colorAlpha" min="0" max="1" value="1" step="0.01">
+              </div>
+              <div class="resetValue">
+                <button id="resetColor">Reset</button>
+                <span id="colorValidation">Your Color Here</span>
+              </div>
+            </div>
+          </div>
+          <div class="sizeControls">
+            <p>Size</p>
+            <input type="number" id="canvasSizeInput" min="0" max="50" value="25">
+          </div>
+        </div>
+      </div>
+      <div class="draw">
+        <div class="canvas">
 
+        </div>
+      </div>
+    </div>
+
+    <script src="javascript.js" charset="utf-8"></script>
   </body>
 </html>
