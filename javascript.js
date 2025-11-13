@@ -6,7 +6,7 @@ const resetColorDoc = document.getElementById("resetColor")
 const colorValidationDoc = document.getElementById("colorValidation")
 
 function createCanvasGrid (size) {
-  const canvasColumnsDocArr = Array(size).fill(0).map((_, index) => {
+  const canvasColumnsDocArr = Array(+size).fill(0).map((_, index, arr) => {
     const canvasColumn = document.createElement('div')
     canvasColumn.classList.add(`column`)
     canvasColumn.id = `x-${index}`
@@ -23,7 +23,6 @@ function createCanvasGrid (size) {
     }
     return item
   })
-
   return canvasColumnsDocArr
 }
 
@@ -33,3 +32,7 @@ function addCanvasGrid (size) {
     canvasGridDoc.appendChild(item)
   });
 }
+
+canvasSizeDoc.addEventListener("change", (e) => {
+  addCanvasGrid(e.target.value)
+})
