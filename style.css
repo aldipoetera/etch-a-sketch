@@ -27,6 +27,11 @@ input[type="range"]::-moz-range-thumb {
     cursor: pointer;
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
 }
+p {margin: 0;}
+button, #colorRGB {
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+}
 
 .fullpage {
   height: 100vh;
