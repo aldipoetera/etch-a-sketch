@@ -1,6 +1,11 @@
 body {
   margin: 0;
 }
+p {margin: 0;}
+button, #colorRGB {
+  background-color: rgb(255, 255, 255);
+  border-radius: 5px;
+}
 
 .fullpage {
   height: 100vh;
@@ -18,6 +23,8 @@ body {
   justify-content: space-between;
   align-items: center;
   padding: 1.2em;
+
+  box-shadow: 2px 0px 10px;
 }
 
 .logo {
@@ -56,7 +63,7 @@ body {
   display: flex;
   align-items: center;
 }
-.sizeControls p {margin: 0;}
+
 .sizeControls {
   display: flex;
   flex-direction: column;
