@@ -7,6 +7,7 @@ const resetColorDoc = document.getElementById("resetColor")
 const previewStrokeDoc = document.querySelector(".previewStroke")
 const colorValidationDoc = document.getElementById("colorValidation")
 const rainbowCheckboxDoc = document.getElementById("rainbowEnable")
+const eraserCheckboxDoc = document.getElementById("eraserEnable")
 
 let isMouseDown = false;
 document.addEventListener("mousedown",  () => {
@@ -63,6 +64,11 @@ function randRainbow () {
 }
 
 function drawCanvasStroke(item) {
+  if (eraserCheckboxDoc.checked) {
+    item.replaceChildren();
+    updatePreviewStroke(+canvasSizeDoc.value);
+    return
+  }
   const canvasStroke = document.createElement('div')
   canvasStroke.classList.add('stroke')
   canvasStroke.dataset.stroke = currStrokeNum
@@ -84,8 +90,9 @@ function updatePreviewStroke (size, updateStroke = true) {
   createCanvasGrid(size).forEach((item) => {
     previewStrokeDoc.appendChild(item)
   });
-  if (updateStroke) {
-    canvasGridDoc.querySelectorAll(`[data-stroke="${currStrokeNum-1}"]`).forEach((item) => {
+  const currentStroke = canvasGridDoc.querySelectorAll(`[data-stroke="${currStrokeNum-1}"]`)
+  if (updateStroke && currentStroke.length > 0) {
+    currentStroke.forEach((item) => {
       const xItem = +item.parentNode.parentNode.dataset.x
       const yItem = +item.parentNode.dataset.y
       previewStrokeDoc.querySelector(`[data-x="${xItem}"]`)

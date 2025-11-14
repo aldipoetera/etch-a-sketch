@@ -133,9 +133,3 @@ input[type="range"]::-moz-range-thumb {
 #rainbowEnable:checked {
   accent-color: black;
 }
-
-.nextColor {
-  display: flex;
-  flex: 1;
-  height: 2em;
-}
