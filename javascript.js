@@ -14,28 +14,37 @@ document.addEventListener("mouseup",  () => {
   isMouseDown = false;
 })
 
+function createCanvasZIdxMatrix (size) {
+  return Array(size).fill(0).map(()=>Array(size).fill(0))
+}
+
 let currRGB = [0,0,0];
 let currAlpha = 1;
+let currZIndex = createCanvasZIdxMatrix(+canvasSizeDoc.value)
+let currStrokeNum = 0;
 colorRGBDoc.value = "#000000"
 colorAlphaDoc.value = 1
-addCanvasGrid(canvasSizeDoc.value)
+addCanvasGrid(+canvasSizeDoc.value)
 updateColorValidation()
 
+console.log(createCanvasZIdxMatrix(+canvasSizeDoc.value))
+
 function createCanvasGrid (size) {
+  const createCanvasRow = (jndex) => {
+    const canvasGrid = document.createElement('div')
+    canvasGrid.classList.add(`grid`)
+    canvasGrid.dataset.x = `${jndex}`
+    canvasGrid.draggable = false
+    canvasGrid.style.position = `relative`;
+    return canvasGrid
+  }
   const canvasColumnsDocArr = Array(+size).fill(0).map((_, index) => {
     const canvasColumn = document.createElement('div')
     canvasColumn.classList.add(`column`)
-    canvasColumn.id = `x-${index}`
+    canvasColumn.dataset.y = `${index}`
     canvasColumn.draggable = false
     return canvasColumn
   }).map((item) => {
-    const createCanvasRow = (jndex) => {
-      const canvasGrid = document.createElement('div')
-      canvasGrid.classList.add(`grid`)
-      canvasGrid.id = `y-${jndex}`
-      canvasGrid.draggable = false
-      return canvasGrid
-    }
     for (let j = 0; j < size; j++) {
       item.appendChild(createCanvasRow(j));
     }
@@ -44,8 +53,25 @@ function createCanvasGrid (size) {
   return canvasColumnsDocArr
 }
 
+function drawCanvasStroke(item) {
+  const canvasStroke = document.createElement('div')
+  canvasStroke.classList.add('stroke')
+  canvasStroke.dataset.strokeNum = currStrokeNum
+  canvasStroke.style.backgroundColor = `rgba(${currRGB.join(', ')}, ${currAlpha})`
+  canvasStroke.style.width = `100%`;
+  canvasStroke.style.height = `100%`;
+  canvasStroke.style.position = `absolute`;
+
+  const zPos = currZIndex[+ item.dataset.x][+ item.parentNode.dataset.y]
+  canvasStroke.style.zIndex = zPos;
+  currZIndex[+item.dataset.x][+item.parentNode.dataset.y] += 1;
+  item.appendChild(canvasStroke)
+}
+
 function addCanvasGrid (size) {
   canvasGridDoc.replaceChildren();
+  currZIndex = createCanvasZIdxMatrix(size)
+
   createCanvasGrid(size).forEach((item) => {
     canvasGridDoc.appendChild(item)
   });
@@ -57,13 +83,16 @@ function addCanvasGrid (size) {
     //   item.style.backgroundColor = `rgba(${currRGB.join(', ')}, ${currAlpha})`
     // })
 
-    item.addEventListener("mouseenter", () => {
+    item.addEventListener("pointerenter", () => {
       if (isMouseDown === true) {
-        item.style.backgroundColor = `rgba(${currRGB.join(', ')}, ${currAlpha})`
+        drawCanvasStroke(item)
       }
     })
-    item.addEventListener("mousedown", () => {
-      item.style.backgroundColor = `rgba(${currRGB.join(', ')}, ${currAlpha})`
+    item.addEventListener("pointerdown", () => {
+      drawCanvasStroke(item)
+    })
+    item.addEventListener("pointerup", () => {
+      currStrokeNum += 1;
     })
 
     // Prevents pesky dragging when you're drawing
@@ -86,7 +115,7 @@ function updateColorValidation () {
 }
 
 canvasSizeDoc.addEventListener("change", (e) => {
-  addCanvasGrid(e.target.value)
+  addCanvasGrid(+e.target.value)
 })
 
 colorPickerDoc.addEventListener("change", (e) => {
@@ -111,6 +140,6 @@ colorPickerDoc.addEventListener("click", (e) => {
 
 document.querySelector("#clearCanvas").addEventListener("click", () => {
   document.querySelectorAll(".grid").forEach((item) => {
-    item.style.backgroundColor = ''
+    item.replaceChildren()
   })
 })

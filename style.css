@@ -39,6 +39,7 @@ input[type="range"]::-moz-range-thumb {
 
 .header {
   flex-grow: 0;
+  flex-shrink: 0;
 
   display: flex;
   justify-content: space-between;
@@ -62,9 +63,9 @@ input[type="range"]::-moz-range-thumb {
 
 .canvas {
   box-sizing: border-box;
-  height: 80vh;
-  width: 80vh;
-  border: 2px solid black;
+  height: 40rem;
+  width: 40rem;
+  border: 5px solid black;
   border-radius: 5px;
 }
 
@@ -77,6 +78,7 @@ input[type="range"]::-moz-range-thumb {
 
 .controls {
   display: flex;
+  align-items: start;
   gap: 2em;
 }
 
