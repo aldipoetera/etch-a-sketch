@@ -4,6 +4,7 @@ const colorRGBDoc = document.getElementById("colorRGB")
 const colorAlphaDoc = document.getElementById("colorAlpha")
 const colorPickerDoc = document.querySelector(".colorPick")
 const resetColorDoc = document.getElementById("resetColor")
+const previewStrokeDoc = document.querySelector(".previewStroke")
 const colorValidationDoc = document.getElementById("colorValidation")
 
 let isMouseDown = false;
@@ -33,7 +34,7 @@ function createCanvasGrid (size) {
   const createCanvasRow = (jndex) => {
     const canvasGrid = document.createElement('div')
     canvasGrid.classList.add(`grid`)
-    canvasGrid.dataset.x = `${jndex}`
+    canvasGrid.dataset.y = `${jndex}`
     canvasGrid.draggable = false
     canvasGrid.style.position = `relative`;
     return canvasGrid
@@ -41,7 +42,7 @@ function createCanvasGrid (size) {
   const canvasColumnsDocArr = Array(+size).fill(0).map((_, index) => {
     const canvasColumn = document.createElement('div')
     canvasColumn.classList.add(`column`)
-    canvasColumn.dataset.y = `${index}`
+    canvasColumn.dataset.x = `${index}`
     canvasColumn.draggable = false
     return canvasColumn
   }).map((item) => {
@@ -56,16 +57,33 @@ function createCanvasGrid (size) {
 function drawCanvasStroke(item) {
   const canvasStroke = document.createElement('div')
   canvasStroke.classList.add('stroke')
-  canvasStroke.dataset.strokeNum = currStrokeNum
+  canvasStroke.dataset.stroke = currStrokeNum
   canvasStroke.style.backgroundColor = `rgba(${currRGB.join(', ')}, ${currAlpha})`
   canvasStroke.style.width = `100%`;
   canvasStroke.style.height = `100%`;
   canvasStroke.style.position = `absolute`;
 
-  const zPos = currZIndex[+ item.dataset.x][+ item.parentNode.dataset.y]
+  const zPos = currZIndex[+ item.parentNode.dataset.x][+ item.dataset.y]
   canvasStroke.style.zIndex = zPos;
-  currZIndex[+item.dataset.x][+item.parentNode.dataset.y] += 1;
+  currZIndex[+ item.parentNode.dataset.x][+ item.dataset.y] += 1;
   item.appendChild(canvasStroke)
+}
+
+function updatePreviewStroke (size, updateStroke = true) {
+  previewStrokeDoc.replaceChildren();
+  createCanvasGrid(size).forEach((item) => {
+    previewStrokeDoc.appendChild(item)
+  });
+  if (updateStroke) {
+    canvasGridDoc.querySelectorAll(`[data-stroke="${currStrokeNum-1}"]`).forEach((item) => {
+      const xItem = +item.parentNode.parentNode.dataset.x
+      const yItem = +item.parentNode.dataset.y
+      previewStrokeDoc.querySelector(`[data-x="${xItem}"]`)
+        .querySelector(`[data-y="${yItem}"]`)
+        .appendChild(item.cloneNode())
+    });
+  }
+
 }
 
 function addCanvasGrid (size) {
@@ -76,13 +94,8 @@ function addCanvasGrid (size) {
     canvasGridDoc.appendChild(item)
   });
 
+
   document.querySelectorAll('.grid').forEach((item) => {
-
-    // // TOP's project requirements; I am not confined to such restrictions.
-    // item.addEventListener("mouseenter", () => {
-    //   item.style.backgroundColor = `rgba(${currRGB.join(', ')}, ${currAlpha})`
-    // })
-
     item.addEventListener("pointerenter", () => {
       if (isMouseDown === true) {
         drawCanvasStroke(item)
@@ -90,9 +103,6 @@ function addCanvasGrid (size) {
     })
     item.addEventListener("pointerdown", () => {
       drawCanvasStroke(item)
-    })
-    item.addEventListener("pointerup", () => {
-      currStrokeNum += 1;
     })
 
     // Prevents pesky dragging when you're drawing
@@ -116,6 +126,7 @@ function updateColorValidation () {
 
 canvasSizeDoc.addEventListener("change", (e) => {
   addCanvasGrid(+e.target.value)
+  updatePreviewStroke(+e.target.value, false)
 })
 
 colorPickerDoc.addEventListener("change", (e) => {
@@ -125,6 +136,13 @@ colorPickerDoc.addEventListener("change", (e) => {
   } else if (e.target.id === "colorAlpha") {
     currAlpha = +e.target.value;
     updateColorValidation()
+  }
+})
+
+document.querySelector(".fullpage").addEventListener("pointerup", () => {
+  if (canvasGridDoc.querySelectorAll(`[data-stroke="${currStrokeNum}"]`).length > 0){
+    currStrokeNum += 1;
+    updatePreviewStroke(+canvasSizeDoc.value);
   }
 })
 
@@ -139,7 +157,6 @@ colorPickerDoc.addEventListener("click", (e) => {
 })
 
 document.querySelector("#clearCanvas").addEventListener("click", () => {
-  document.querySelectorAll(".grid").forEach((item) => {
-    item.replaceChildren()
-  })
+  addCanvasGrid(+canvasSizeDoc.value)
+  updatePreviewStroke(+canvasSizeDoc.value, false)
 })
