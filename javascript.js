@@ -6,6 +6,7 @@ const colorPickerDoc = document.querySelector(".colorPick")
 const resetColorDoc = document.getElementById("resetColor")
 const previewStrokeDoc = document.querySelector(".previewStroke")
 const colorValidationDoc = document.getElementById("colorValidation")
+const rainbowCheckboxDoc = document.getElementById("rainbowEnable")
 
 let isMouseDown = false;
 document.addEventListener("mousedown",  () => {
@@ -54,11 +55,20 @@ function createCanvasGrid (size) {
   return canvasColumnsDocArr
 }
 
+
+function randRainbow () {
+  return Array(3).fill(0).map((item) => {
+    return 1 + Math.floor(Math.random()*255)
+  })
+}
+
 function drawCanvasStroke(item) {
   const canvasStroke = document.createElement('div')
   canvasStroke.classList.add('stroke')
   canvasStroke.dataset.stroke = currStrokeNum
-  canvasStroke.style.backgroundColor = `rgba(${currRGB.join(', ')}, ${currAlpha})`
+  canvasStroke.style.backgroundColor = !rainbowCheckboxDoc.checked ?
+    `rgba(${currRGB.join(', ')}, ${currAlpha})` :
+    `rgba(${randRainbow().join(', ')})`
   canvasStroke.style.width = `100%`;
   canvasStroke.style.height = `100%`;
   canvasStroke.style.position = `absolute`;

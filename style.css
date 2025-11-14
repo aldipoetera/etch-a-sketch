@@ -3,7 +3,10 @@ body {
   font-family: sans-serif;
 }
 
-p {margin: 0;}
+p {
+  margin: 0;
+  font-weight: 700;
+}
 button, #colorRGB {
   background-color: rgb(255, 255, 255);
   border-radius: 5px;
@@ -125,4 +128,14 @@ input[type="range"]::-moz-range-thumb {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+#rainbowEnable:checked {
+  accent-color: black;
+}
+
+.nextColor {
+  display: flex;
+  flex: 1;
+  height: 2em;
 }
