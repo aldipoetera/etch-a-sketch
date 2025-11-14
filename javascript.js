@@ -74,7 +74,7 @@ function drawCanvasStroke(item) {
   canvasStroke.dataset.stroke = currStrokeNum
   canvasStroke.style.backgroundColor = !rainbowCheckboxDoc.checked ?
     `rgba(${currRGB.join(', ')}, ${currAlpha})` :
-    `rgba(${randRainbow().join(', ')})`
+    `rgba(${randRainbow().join(', ')},  ${currAlpha})`
   canvasStroke.style.width = `100%`;
   canvasStroke.style.height = `100%`;
   canvasStroke.style.position = `absolute`;
