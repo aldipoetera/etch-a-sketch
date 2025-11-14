@@ -160,3 +160,11 @@ document.querySelector("#clearCanvas").addEventListener("click", () => {
   addCanvasGrid(+canvasSizeDoc.value)
   updatePreviewStroke(+canvasSizeDoc.value, false)
 })
+
+document.querySelector("#deleteStroke").addEventListener("click", () => {
+  canvasGridDoc.querySelectorAll(`[data-stroke="${currStrokeNum-1}"]`).forEach((item) => {
+    item.remove()
+  });
+  currStrokeNum = Math.max(currStrokeNum-1, 0);
+  updatePreviewStroke(+canvasSizeDoc.value);
+})
